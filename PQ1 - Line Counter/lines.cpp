@@ -36,6 +36,7 @@ int lines_in_file(const char *filename)
     {
         line_count++;
     }
+    file.close();
     return line_count;
 }
 

@@ -1,6 +1,21 @@
-// provide file header documentation using Doxygen tags ...
+/*!******************************************************************
+ * \file      splitter.cpp
+ * \author    Benjamin Lee
+ * \par       DP email: benjaminzhiyuan.lee\@digipen.edu.sg
+ * \par       Course: CSD2126
+ * \par       Section: B
+ * \par      
+ * \date      30-08-2023
+ * 
+ * \brief  
+ *********************************************************************/
 
 // add other necessary headers from C++ standard library ...
+#include <iostream>
+#include <fstream>
+#include <vector>
+#include <string>
+#include <cstdlib>
 // Note: you cannot use C standard library I/O ...
 #include "splitter.h"
 
