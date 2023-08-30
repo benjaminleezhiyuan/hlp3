@@ -1,20 +1,68 @@
-/*
-One of the ways that is often used to measure the amount of work you've done in project courses is
-to count the lines of code you've written. Although it's debatable whether this is a good metric,
-it certainly is a good way to exercise your C++ knowledge.
+/*!******************************************************************
+ * \file      lines.cpp
+ * \author    Benjamin Lee
+ * \par       DP email: benjaminzhiyuan.lee\@digipen.edu.sg
+ * \par       Course: CSD2126
+ * \par       Section: B
+ * \par      
+ * \date      30-08-2023
+ * 
+ * \brief     Function definition for line counter
+ *********************************************************************/
 
-In namespace HLP3, declare a function lines in lines.hpp and define the function in lines.cpp.
-You cannot use the I/O facilities from the C standard library. Instead, you must use the C++-only
-I/O facilities from the C++ standard library. Any references to FILE*, <cstdio>, fopen, fread,
-fscanf, fgets, ... will not compile!!!
 
-Function lines takes an array of (text) file names and calculates the total number of lines in these files.
-To keep this exercise as simple as possible, assume a line in a text file is defined as a sequence of
-characters terminated by newline character. Function lines takes an array as parameter with each element
-of the array pointing to a C-style string that specifies the name of a text file. The last element of the
-array is a null pointer signifying the end of the array. The function must return an int value specifying
-the total number of lines in the list of files specified by the function's parameter.
+#include "lines.hpp"
 
-NOTE: Submissions using functions from the C standard library will be considered in violation of the Academic Integrity Policy.
-Just don't do it!!!
-*/
+/**
+ * \brief Count the number of lines in a file.
+ *
+ * This function opens the specified file and counts the number of lines present in it.
+ *
+ * \param filename The name of the file to be opened and counted.
+ * \return The number of lines in the file. Returns 0 if the file cannot be opened.
+ */
+int lines_in_file(const char *filename)
+{
+    std::ifstream file(filename);
+    if (!file.is_open())
+    {
+        std::cerr << "Error opening file: " << filename << std::endl;
+        return 0;
+    }
+
+    int line_count = 0;
+    std::string line;
+    while (std::getline(file, line))
+    {
+        line_count++;
+    }
+    return line_count;
+}
+
+/**
+ * \brief Count the total number of lines in multiple files.
+ *
+ * This function takes an array of file names and counts the total number of lines
+ * across all the files.
+ *
+ * \param filename An array of C-style strings (const char*) containing the names of files.
+ *                 The last element of the array must be a nullptr to indicate the end.
+ *
+ * \return The total number of lines in all the files. Returns 0 if any file cannot be opened.
+ */
+int HLP3::lines(const char *filename[])
+{
+    int total = 0;
+    int index = 0;
+
+    while (filename[index] != nullptr)
+    {
+        int file_lines = lines_in_file(filename[index]);
+        if (file_lines >= 0)
+        {
+            total += file_lines;
+        }
+        index++;
+    }
+    return total;
+}
