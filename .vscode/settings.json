@@ -1,0 +1,6 @@
+{
+    "files.associations": {
+        "splitter.h": "c",
+        "cstddef": "cpp"
+    }
+}

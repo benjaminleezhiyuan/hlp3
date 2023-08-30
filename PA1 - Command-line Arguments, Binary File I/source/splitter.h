@@ -16,6 +16,7 @@
 #include <stddef.h> // size_t definition
 
 #ifdef __cplusplus
+#include <cstddef>
 extern "C" {
 #endif
 
@@ -29,20 +30,15 @@ typedef enum {
   E_JOIN_SUCCESS
 } SplitResult;
 
-// provide function header documentation using Doxygen tags to explain to
-// your client how they must use this function to either split big file into
-// smaller files or join [previously split] smaller files into big file ...
-
 /**
- * @brief Split or join files based on the provided command line arguments.
+ * @brief Splits or joins files based on the provided arguments.
  *
- * This function takes the command line arguments passed to it and processes them
- * to either split a big file into smaller files or join previously split smaller
- * files into a big file.
+ * This function takes command-line arguments (`argc` and `argv`) to determine
+ * the operation to perform (splitting or joining) and the necessary parameters.
  *
- * @param argc The number of command line arguments.
- * @param argv An array of strings containing the command line arguments.
- * @return The result of the split or join operation (SplitResult).
+ * @param argc Number of command-line arguments.
+ * @param argv Array of command-line argument strings.
+ * @return SplitResult indicating the success or failure of the operation.
  */
 SplitResult split_join(int argc, char *argv[]);
 
