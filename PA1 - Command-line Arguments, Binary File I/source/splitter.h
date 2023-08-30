@@ -13,10 +13,7 @@
 #ifndef SPLITTER_H
 #define SPLITTER_H
 
-#include <stddef.h> // size_t definition
-
 #ifdef __cplusplus
-#include <cstddef>
 extern "C" {
 #endif
 
