@@ -26,13 +26,11 @@
 
 SplitResult split(size_t pieceSize, const char *outputDir, const char *inputFile)
 {
-
 }
 
 SplitResult join(const char *outputFile, const char *inputDir)
 
 {
-
 }
 
 SplitResult split_join(int argc, char *argv[])
@@ -53,7 +51,7 @@ SplitResult split_join(int argc, char *argv[])
     // Read the input file and split it into smaller pieces
     // Write the smaller pieces to the output directory
     // Set rs based on the success or failure of the operation
-    rs = split((size_t)atoi(argv[2]),argv[4],argv[6]);
+    rs = split((size_t)atoi(argv[2]), argv[4], argv[6]);
   }
   else if (strcmp(operation, "-j") == 0)
   {
@@ -61,7 +59,7 @@ SplitResult split_join(int argc, char *argv[])
     // Read the smaller pieces and join them into the original file
     // Write the joined data to the output file
     // Set rs based on the success or failure of the operation
-    rs = join(argv[3],argv[5]);
+    rs = join(argv[3], argv[5]);
   }
 
   return rs;
