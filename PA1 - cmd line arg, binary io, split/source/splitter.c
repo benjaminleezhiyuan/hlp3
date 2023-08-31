@@ -30,11 +30,10 @@
 SplitResult split(char *argv[])
 {
   int chunkSize = atoi(argv[2]);
-  if (chunkSize > FOUR_K)
+  if(chunkSize > FOUR_K)
   {
-    chunkSize = FOUR_K; // Limit the chunk size to FOUR_K if it's larger
+    chunkSize = FOUR_K;
   }
-
   const char *outputPath = argv[4];
   const char *inputPath = argv[6];
 
@@ -49,7 +48,7 @@ SplitResult split(char *argv[])
   rewind(sourceFile);
 
   int numChunks = (fileSize + chunkSize - 1) / chunkSize;
-  char *buffer = (char *)malloc(chunkSize);
+  char *buffer = (char *)malloc(atoi(argv[2]));
   if (!buffer)
   {
     fclose(sourceFile);
@@ -61,7 +60,7 @@ SplitResult split(char *argv[])
     int bytesRead = fread(buffer, 1, chunkSize, sourceFile);
 
     char chunkFilename[MAX_FILENAME_LENGTH];
-    snprintf(chunkFilename, MAX_FILENAME_LENGTH, "%s%04d", outputPath, chunkIndex);
+    snprintf(chunkFilename, MAX_FILENAME_LENGTH, "%s%04d", outputPath, chunkIndex + 1);
     FILE *chunkFile = fopen(chunkFilename, "ab");
     if (!chunkFile)
     {
@@ -145,7 +144,7 @@ SplitResult split_join(int argc, char *argv[])
     // Read the smaller pieces and join them into the original file
     // Write the joined data to the output file
     // Set rs based on the success or failure of the operation
-    rs = join(argc,argv);
+    rs = join(argc, argv);
   }
 
   return rs;

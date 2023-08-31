@@ -13,9 +13,6 @@
 #ifndef SPLITTER_H
 #define SPLITTER_H
 
-#ifdef __cplusplus
-extern "C" {
-#endif
 
 typedef enum {
   E_BAD_SOURCE = 1,
@@ -37,10 +34,9 @@ typedef enum {
  * @param argv Array of command-line argument strings.
  * @return SplitResult indicating the success or failure of the operation.
  */
-SplitResult split_join(int argc, char *argv[]);
-
 #ifdef __cplusplus
-}
+extern "C" 
 #endif
+SplitResult split_join(int argc, char *argv[]);
 
 #endif // end of #ifndef SPLITTER_H

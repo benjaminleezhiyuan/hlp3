@@ -13,8 +13,10 @@
 #include "splitter.h"
 #include <iostream>
 #include <fstream>
-#include <cstring>
-#include <cstddef>
+#include <vector>
+#include <string>
+#include <sstream>
+#include <iomanip>
 
 // this is the maximum size of buffer for reading data from input file
 // and to write data to output file ...
@@ -28,16 +30,13 @@ constexpr int FOUR_K {4096}; // Don't modify this!!!
 constexpr int MAX_FILENAME_LENGTH {128};
 
 SplitResult split(char *argv[]) {
-    int chunkSize = std::atoi(argv[2]);
-    if (chunkSize > FOUR_K) {
-        chunkSize = FOUR_K;
-    }
+    int chunkSize = std::stoi(argv[2]);
 
-    const char *outputPath = argv[4];
-    const char *inputPath = argv[6];
+    const std::string outputPath = argv[4];
+    const std::string inputPath = argv[6];
 
     std::ifstream sourceFile(inputPath, std::ios::binary);
-    if (!sourceFile.is_open()) {
+    if (!sourceFile) {
         return E_BAD_SOURCE;
     }
 
@@ -46,74 +45,54 @@ SplitResult split(char *argv[]) {
     sourceFile.seekg(0, std::ios::beg);
 
     int numChunks = (fileSize + chunkSize - 1) / chunkSize;
-    char *buffer = new char[chunkSize];
-    if (!buffer) {
-        sourceFile.close();
-        return E_NO_MEMORY;
-    }
+    char *buffer = new char[chunkSize]; // Using 'new' for memory allocation
 
     for (int chunkIndex = 0; chunkIndex < numChunks; ++chunkIndex) {
-        int bytesRead = 0;
+        int bytesRead = sourceFile.readsome(buffer, chunkSize);
 
-        while (bytesRead + chunkSize <= fileSize) {
-            sourceFile.read(buffer, chunkSize);
-            bytesRead += sourceFile.gcount();
+        // Create the chunk filename with padded zeros
+        std::ostringstream chunkFilenameStream;
+        chunkFilenameStream << outputPath << std::setw(4) << std::setfill('0') << chunkIndex + 1;
+        std::string chunkFilename = chunkFilenameStream.str();
 
-            char chunkFilename[MAX_FILENAME_LENGTH];
-            snprintf(chunkFilename, MAX_FILENAME_LENGTH, "%s%04d", outputPath, chunkIndex + 1);
-            std::ofstream chunkFile(chunkFilename, std::ios::binary | std::ios::app);
-            if (!chunkFile.is_open()) {
-                delete[] buffer;
-                sourceFile.close();
-                return E_BAD_DESTINATION;
-            }
-            chunkFile.write(buffer, bytesRead);
+        std::ofstream chunkFile(chunkFilename, std::ios::binary | std::ios::app);
+        if (!chunkFile) {
+            delete[] buffer; // Release allocated memory before returning
+            return E_BAD_DESTINATION;
         }
 
-        int remainingBytes = fileSize - bytesRead;
-        if (remainingBytes > 0) {
-            sourceFile.read(buffer, remainingBytes);
-            bytesRead += sourceFile.gcount();
-
-            char chunkFilename[MAX_FILENAME_LENGTH];
-            snprintf(chunkFilename, MAX_FILENAME_LENGTH, "%s%04d", outputPath, chunkIndex + 1);
-            std::ofstream chunkFile(chunkFilename, std::ios::binary | std::ios::app);
-            if (!chunkFile.is_open()) {
-                delete[] buffer;
-                sourceFile.close();
-                return E_BAD_DESTINATION;
-            }
-            chunkFile.write(buffer, bytesRead);
-        }
+        chunkFile.write(buffer, bytesRead);
     }
 
-    delete[] buffer;
-    sourceFile.close();
-
+    delete[] buffer; // Release allocated memory
     return E_SPLIT_SUCCESS;
 }
 
 SplitResult join(int argc, char *argv[]) {
-    const char *outputPath = argv[3];
+    const std::string outputPath = argv[3];
 
+    // Open the output file for writing
     std::ofstream outputFile(outputPath, std::ios::binary);
     if (!outputFile.is_open()) {
-        return E_BAD_DESTINATION;
+        return E_BAD_DESTINATION; // Failed to open output file
     }
 
+    // Process each chunk file
     for (int i = 5; i < argc; i++) {
-        const char *chunkPath = argv[i];
+        const std::string chunkPath = argv[i];
 
+        // Open the chunk file for reading
         std::ifstream chunkFile(chunkPath, std::ios::binary);
         if (!chunkFile.is_open()) {
             outputFile.close();
-            return E_BAD_SOURCE;
+            return E_BAD_SOURCE; // Failed to open chunk file
         }
 
-        char buffer[FOUR_K];
+        // Read and write the content of the chunk file
+        std::vector<char> buffer(FOUR_K);
         size_t bytesRead;
-        while ((bytesRead = chunkFile.readsome(buffer, sizeof(buffer))) > 0) {
-            outputFile.write(buffer, bytesRead);
+        while ((bytesRead = chunkFile.read(buffer.data(), buffer.size()).gcount()) > 0) {
+            outputFile.write(buffer.data(), bytesRead);
         }
 
         chunkFile.close();
@@ -121,22 +100,22 @@ SplitResult join(int argc, char *argv[]) {
 
     outputFile.close();
 
-    return E_JOIN_SUCCESS;
+    return E_JOIN_SUCCESS; // Joining successful
 }
 
 SplitResult split_join(int argc, char *argv[]) {
-    SplitResult rs = E_NO_ACTION;
+    SplitResult rs = SplitResult::E_NO_ACTION;
 
     if (argc < 4) {
         // Handle insufficient command-line arguments
         return rs;
     }
 
-    char *operation = argv[1]; // check if it's a split or join operation
+    std::string operation = argv[1];
 
-    if (std::strcmp(operation, "-s") == 0) {
+    if (operation == "-s") {
         rs = split(argv);
-    } else if (std::strcmp(operation, "-j") == 0) {
+    } else if (operation == "-j") {
         rs = join(argc, argv);
     }
 
