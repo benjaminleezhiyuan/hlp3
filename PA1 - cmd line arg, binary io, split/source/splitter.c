@@ -30,10 +30,7 @@
 SplitResult split(char *argv[])
 {
   int chunkSize = atoi(argv[2]);
-  if(chunkSize > FOUR_K)
-  {
-    chunkSize = FOUR_K;
-  }
+  
   const char *outputPath = argv[4];
   const char *inputPath = argv[6];
 
@@ -103,7 +100,11 @@ SplitResult join(int argc, char *argv[])
     }
 
     // Read and write the content of the chunk file
-    char buffer[FOUR_K];
+    fseek(chunkFile, 0, SEEK_END);
+    long fileSize = ftell(chunkFile);
+    rewind(chunkFile);
+    
+    char *buffer = (char *)malloc(fileSize);
     size_t bytesRead;
     while ((bytesRead = fread(buffer, 1, sizeof(buffer), chunkFile)) > 0)
     {
@@ -111,10 +112,10 @@ SplitResult join(int argc, char *argv[])
     }
 
     fclose(chunkFile);
+    free(buffer);
   }
 
   fclose(outputFile);
-
   return E_JOIN_SUCCESS; // Joining successful
 }
 
