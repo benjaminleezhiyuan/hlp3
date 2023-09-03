@@ -27,6 +27,15 @@
 #define FOUR_K 4096 // Don't modify this!!!
 #define MAX_FILENAME_LENGTH 128
 
+/**
+ * @brief Splits a source file into smaller chunks and writes them to separate destination files.
+ *
+ * This function takes command-line arguments, reads a source file, splits it into chunks, and
+ * writes each chunk to a separate destination file.
+ *
+ * @param argv Command-line arguments passed to the program.
+ * @return SplitResult indicating the success or failure of the operation.
+ */
 SplitResult split(char *argv[])
 {
   int chunkSize = atoi(argv[2]);
@@ -89,6 +98,17 @@ SplitResult split(char *argv[])
   return E_SPLIT_SUCCESS;
 }
 
+/**
+ * @brief Joins multiple chunk files into a single output file.
+ *
+ * This function takes command-line arguments, opens an output file for writing, and then
+ * sequentially reads and appends the content of each chunk file to the output file to
+ * join them together.
+ *
+ * @param argc The number of command-line arguments.
+ * @param argv Command-line arguments passed to the program, including the chunk file paths.
+ * @return SplitResult indicating the success or failure of the join operation.
+ */
 SplitResult join(int argc, char *argv[])
 {
   const char *outputPath = argv[3];
@@ -129,6 +149,16 @@ SplitResult join(int argc, char *argv[])
   return E_JOIN_SUCCESS; // Joining successful
 }
 
+/**
+ * @brief Splits or joins files based on the specified operation.
+ *
+ * This function takes command-line arguments and performs either a splitting or joining
+ * operation on files based on the operation argument provided.
+ *
+ * @param argc The number of command-line arguments.
+ * @param argv Command-line arguments passed to the program, including the operation flag.
+ * @return SplitResult indicating the success or failure of the split or join operation.
+ */
 SplitResult split_join(int argc, char *argv[])
 {
   SplitResult rs = E_NO_ACTION;

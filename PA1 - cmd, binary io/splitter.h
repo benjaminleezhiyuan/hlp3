@@ -7,7 +7,7 @@
  * \par      
  * \date      30-08-2023
  * 
- * \brief  
+ * \brief     Declarations for function split_join and result enumurations.
  *********************************************************************/
 
 #ifndef SPLITTER_H
