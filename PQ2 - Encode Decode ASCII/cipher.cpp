@@ -133,4 +133,59 @@ void decode(char const* ciphertext, int32_t num_chars, char* plaintext) {
 // assume all lower case input a-z (no spaces)
 void encode(char const * plaintext, char* encryptedtext, int32_t *num_bits_used ) {
 	// your stuff ...
+  int32_t pos{};
+    int32_t num_bits_encoded = 0;
+
+    for (int32_t i = 0; plaintext[i] != '\0'; ++i) {
+        char current_char = plaintext[i];
+        // Determine the group and index for the current character 'current_char'.
+        int32_t group_index;
+        int32_t index;
+
+        // Determine the group index (0, 1, 2, or 3) based on your encoding scheme.
+        if (current_char >= 'a' && current_char <= 'b') {
+            group_index = 0;
+            index = current_char - 'a';
+        } else if (current_char >= 'c' && current_char <= 'f') {
+            group_index = 1;
+            index = current_char - 'c';
+        } else if (current_char >= 'g' && current_char <= 'n') {
+            group_index = 2;
+            index = current_char - 'g';
+        } else if (current_char >= 'o' && current_char <= 'z') {
+            group_index = 3;
+            index = current_char - 'o';
+        } else {
+            // Handle unsupported characters (if any) here.
+            // For example, you might throw an error or skip them.
+        }
+
+        // Encode the group_index and index into encryptedtext using the 'pos' variable.
+        // You should set the appropriate bits in 'encryptedtext' based on the calculated values.
+        for (int32_t j = 0; j < 2; ++j) {
+            int32_t bit = (group_index >> j) & 1;
+            if (bit) {
+                encryptedtext[pos / 8] |= (1 << (pos % 8));
+            } else {
+                encryptedtext[pos / 8] &= ~(1 << (pos % 8));
+            }
+            ++pos;
+        }
+
+        for (int32_t j = 0; j < group_index + 1; ++j) {
+            int32_t bit = (index >> j) & 1;
+            if (bit) {
+                encryptedtext[pos / 8] |= (1 << (pos % 8));
+            } else {
+                encryptedtext[pos / 8] &= ~(1 << (pos % 8));
+            }
+            ++pos;
+        }
+
+        // Update 'num_bits_encoded' to keep track of the total bits used for encoding.
+        num_bits_encoded += group_index + 3; // 2 bits for group + group_index + 1 bits for index
+    }
+
+    // Set 'num_bits_used' to the total number of bits used for encoding.
+    *num_bits_used = num_bits_encoded;
 }
