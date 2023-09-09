@@ -7,7 +7,7 @@
  * \par
  * \date      30-08-2023
  *
- * \brief
+ * \brief     C implementation of splitter
  *********************************************************************/
 
 #include "splitter.h"

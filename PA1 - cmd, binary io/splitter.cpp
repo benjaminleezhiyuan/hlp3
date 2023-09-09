@@ -7,7 +7,7 @@
  * \par
  * \date      30-08-2023
  *
- * \brief         
+ * \brief     C++ implementation of splitter 
  *********************************************************************/
 
 #include "splitter.h"
@@ -53,7 +53,7 @@ SplitResult split(char *argv[])
 
     sourceFile.seekg(0, std::ios::end);
     long fileSize = sourceFile.tellg();
-    sourceFile.seekg(0, std::ios::beg);
+    sourceFile.seekg(0, std::ios::beg);//go back to start
 
     int numChunks = (fileSize + chunkSize - 1) / chunkSize;
     char *buffer = new char[chunkSize]; // Using 'new' for memory allocation
