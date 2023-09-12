@@ -4,10 +4,10 @@
  * \par       DP email: benjaminzhiyuan.lee\@digipen.edu.sg
  * \par       Course: CSD2126
  * \par       Section: B
- * \par
+ * \par      
  * \date      12-09-2023
- *
- * \brief
+ * 
+ * \brief     This file 
  *********************************************************************/
 #ifndef BITSET_H
 #define BITSET_H
