@@ -7,12 +7,11 @@
  * \par      
  * \date      12-09-2023
  * 
- * \brief     
+ * \brief     This file contains the implementation for bitset clone
  *********************************************************************/
 
 namespace HLP3
 {
-
     /**
      * @brief Default constructor.
      * allocates memory and sets all bits to false based on the size

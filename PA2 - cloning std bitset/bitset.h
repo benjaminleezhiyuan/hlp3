@@ -7,7 +7,7 @@
  * \par      
  * \date      12-09-2023
  * 
- * \brief     This file 
+ * \brief     This file contains the interface for bitset clone
  *********************************************************************/
 #ifndef BITSET_H
 #define BITSET_H
