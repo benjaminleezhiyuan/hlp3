@@ -39,10 +39,19 @@ namespace HLP3
 
     T *get() const { return p; } // DO NOT AMEND!!!
 
-    // Copy constructor to create a copy of another Ptr object.
+/**
+ * @brief Copy constructor for the Ptr class.
+ * 
+ * @param other Another Ptr object to be copied.
+ */
     Ptr(const Ptr &other) : p(new T(*other.p)) {}
 
-    // Copy assignment operator to assign one Ptr object to another of the same type.
+/**
+ * @brief Assignment operator for the Ptr class.
+ *
+ * @param other Another Ptr object whose contents will be assigned to this object.
+ * @return A reference to the updated object after assignment.
+ */
     Ptr &operator=(const Ptr &other)
     {
       if (this != &other) // Ensures not assigning to itself.
@@ -53,32 +62,56 @@ namespace HLP3
       return *this; // Returns a reference to the updated object.
     }
 
-    // Conversion assignment operator - assigns from Ptr<U> to Ptr<T>.
+/**
+ * @brief Template assignment operator for the Ptr class.
+ *
+ * @tparam U The type of the other Ptr object.
+ * @param other Another Ptr object of type U whose contents will be assigned to this object.
+ * @return A reference to the updated object after assignment.
+ */
     template <typename U>
     Ptr &operator=(const Ptr<U> &other)
     {
-      delete p; // Deletes the current data.
-      p = new T(*other.get()); // Copies the data from Ptr<U>.
-      return *this; // Returns a reference to the updated object.
+      delete p;                 // Deletes the current data.
+      p = new T(*other.get());  // Copies the data from Ptr<U>.
+      return *this;             // Returns a reference to the updated object.
     }
 
-    // Conversion constructor from Ptr<U> to Ptr<T>.
+/**
+ * @brief Template constructor for the Ptr class.
+ *
+ * @tparam U The type of the other Ptr object.
+ * @param other Another Ptr object of type U to copy.
+ */
     template <typename U>
     Ptr(const Ptr<U> &other) : p(new T(*other.get())) {}
 
-    // Overloaded dereference operator to allow access to the encapsulated data.
+/**
+ * @brief Overloaded dereference operator for the Ptr class.
+ *
+ * @return A reference to the value pointed to by the Ptr.
+ */
     T &operator*() const
     {
       return *p;
     }
 
-    // Overloaded arrow operator to access the encapsulated data's members.
+/**
+ * @brief Overloaded arrow (->) operator for the Ptr class.
+ *
+ * @return A pointer to the stored object.
+ */
     T *operator->() const
     {
       return p;
     }
 
-    // Overloaded comparison operator (Equality) to compare two Ptr objects.
+/**
+ * @brief Equality comparison operator for the Ptr class.
+ *
+ * @param other Another Ptr object to compare against.
+ * @return True if the pointers are equal, false otherwise.
+ */
     bool operator==(const Ptr &other) const
     {
       return p == other.p;
