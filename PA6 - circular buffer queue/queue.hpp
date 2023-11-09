@@ -1,3 +1,15 @@
+/*!******************************************************************
+ * \file      queue.hpp
+ * \author    Benjamin Lee
+ * \par       DP email: benjaminzhiyuan.lee\@digipen.edu.sg
+ * \par       Course: CSD2126
+ * \par       Section: B
+ * \par      
+ * \date      09-11-2023
+ * 
+ * \brief     This file contains Queue class declaration class circular buffer
+ *********************************************************************/
+
 #ifndef QUEUE_HPP
 #define QUEUE_HPP
 
@@ -66,7 +78,6 @@ namespace HLP3
 
   private:
     size_type head;
-    size_type tail;
     size_type _capacity;
     size_type current_size;
     pointer buffer;
